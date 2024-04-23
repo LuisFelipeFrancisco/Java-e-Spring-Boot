@@ -18,31 +18,31 @@ public class MedicosController {
     @Autowired
     private MedicoRepository repo;
 
-    @PostMapping
+    @PostMapping("/post")
     @Transactional
     public void cadastrar(@RequestBody @Valid DadosCadastroMedico dados){
         repo.save(new Medico(dados));
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, page = 0, sort = {"id"}) Pageable page){
         return repo.findAllByAtivoTrue(page).map(DadosListagemMedico::new);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     @Transactional
     public void atualizar(@RequestBody @Valid DadosAtualizarMedico dados){
         var medico = repo.getReferenceById(dados.id());
         medico.atualizarInformacoes(dados);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @Transactional
     public void excluir(@PathVariable Long id){
         repo.deleteById(id);
     }
 
-    @DeleteMapping("/inativar/{id}")
+    @DeleteMapping("/inactivate/{id}")
     @Transactional
     public void inativar(@PathVariable Long id){
         var medico = repo.getReferenceById(id);
